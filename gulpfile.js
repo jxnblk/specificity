@@ -18,3 +18,7 @@ gulp.task('graph', ['json'], function() {
 
 gulp.task('default', ['graph']);
 
+gulp.task('watch', ['default'], function() {
+  gulp.watch(['./gulp/graph.js'], ['default']);
+});
+

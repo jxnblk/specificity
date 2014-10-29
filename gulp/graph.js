@@ -17,6 +17,7 @@ module.exports = function(options) {
     var pathData = 'M0 0';
     var transform = 'scale(1,-1)'; // Flips the line
     var max = 0;
+    var maxSelector = {};
     for (var i = 0; i < array.length; i++) {
       var value = array[i].specificity;
       var valueArray = value.split(',');
@@ -27,8 +28,8 @@ module.exports = function(options) {
       }
       value = value.replace(/,/g,'');
       if (parseInt(value, 10) > max) {
-
         max = parseInt(value, 10);
+        maxSelector = array[i];
       }
       pathData += 'L' + i + ' ' + value + ' ';
       //pathData += array[i].index + ': ' + value + ' -- ';
@@ -37,12 +38,15 @@ module.exports = function(options) {
     pathData += 'V0 H0 z';
     //console.log(pathData, max);
 
+    var width = array.length;
+    var height = max;
     var svg =
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + array.length + ' ' + max + '" ' +
-      'width="' + array.length + '" height="' + max + '" preserveAspectRatio="none">\n' +
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + width + ' ' + height + '" ' +
+      'width="' + width + '" height="' + height + '" preserveAspectRatio="none">\n' +
       '  <rect width="' + array.length + '" height="' + max + '" fill="#0cf" opacity="0.125"/>\n' +
       '  <path d="' + pathData + '" transform="scale(1,-1) translate(0, -' + max + ')" fill="#0cf" opacity="0.8"/>\n' +
-      '  <text x="8" y="' + (max - 8) + '">Max: ' + max + '</text>\n' +
+      '  <text font-family="Helvetica, sans-serif" x="2" y="2">Max: ' + max + '</text>\n' +
+      '  <text font-family="Helvetica, sans-serif" x="2" y="4">Max Selector: ' + maxSelector.selector + '</text>\n' +
       '</svg>';
 
     file.contents = new Buffer(svg);
